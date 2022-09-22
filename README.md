@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+This POC builds PR Preview environments as well as hosting the latest and greast build from main using Github actions and pages.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### Github pages setup
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Create a branch named `gh-pages` from main
+1. In Github repo settings, on the Pages Tab. Use `gh-pages` branch and target the `docs` folder.
+1. Create a folder in the root of the project named `docs`
+1. Create a simple landing page so other devs know the purpose of the folder. Link to `/docs` for the latest and greatest storybook build.
+1. Storybook build folder can be anywhere, and should be `.gitignore`d!
+1. PR previews will be committed on the `gh-pages` branch and will auto deploy to gh pages - this does take up to 5 mins after the actions complete.
+1. The documentation site is built when there is a merge into `main`. It will overwrite the `docs/docs` folder in the `gh-pages` branch with a fresh build from `main`.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### GH Pages URLs:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Documentation Site: [/docs](https://acolpitts-telus.github.io/storybook-preview/docs)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Sample PR Preview URL: `/pr-preview/feat-sample-slug`
 
-## Learn More
+## Steps to test
 
-To learn more about Next.js, take a look at the following resources:
+1. First, clone the repo and checkout a new feat branch to test the PR preview build.
+1. On a new branch, make a change to the code in the stories folder. This can be a trivial change to the title on `/stories/Introduction.stories.mdx`, it should just be a change that's easy to tell the difference between your PR Preview branch and whats in `main`.
+1. Commit and push your changes, and create a pull request on github.
+1. After the github action completes, you should see a `Preview environment` comment on the pull request you created.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+\*Note: It takes up to five minutes to actually deploy the github pages site once the github action completes, so give it 5 mins before trying/sharing the link.
