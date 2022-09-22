@@ -31,3 +31,10 @@ jobs:
           branch: gh-pages
           folder: storybook-static
           target-folder: docs/pr-preview/${{ steps.generate_slug.outputs.slug }}
+      - name: Publish env
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: Preview environment
+          message: |
+            ## Preview environment
+            https://colpitts-dev.github.io/sb-pr-preview/pr-preview/${{ steps.generate_slug.outputs.slug }}/
