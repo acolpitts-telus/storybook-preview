@@ -36,4 +36,4 @@ jobs:
           header: Preview environment
           message: |
             ## Preview environment
-            https://colpitts-dev.github.io/sb-pr-preview/pr-preview/${{ steps.generate_slug.outputs.slug }}/
+            https://acolpitts-telus.github.io/storybook-preview/pr-preview/${{ steps.generate_slug.outputs.slug }}/
