@@ -27,5 +27,5 @@ jobs:
         with:
           source-dir: ./storybook-static/
           preview-branch: gh-pages
-          umbrella-dir: pr-preview
+          umbrella-dir: docs/pr-preview
           action: auto
