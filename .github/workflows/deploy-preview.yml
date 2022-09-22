@@ -1,10 +1,18 @@
 name: Storybook PR Preview
 
 on:
-  pull_request: null
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+    paths: ["stories/**, "src/components/**"]
+
+concurrency: preview-${{ github.ref }}
 
 jobs:
-  deploy:
+  pr-preview:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -19,12 +27,13 @@ jobs:
         run: echo "##[set-output name=slug;]$(echo ${GITHUB_HEAD_REF#refs/heads/} | sed -r 's/[~\^]+//g' | sed -r 's/[^a-zA-Z0-9]+/-/g' | sed -r 's/^-+\|-+$//g' | tr A-Z a-z)"
       - name: Install Deps and Build SB Preview
         run: npm install && npm run build-storybook
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.1
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
         with:
-          branch: gh-pages
-          folder: storybook-static
-          target-folder: docs/pr-preview/${{ steps.generate_slug.outputs.slug }}
+          source-dir: ./storybook-static/
+          preview-branch: gh-pages
+          umbrella-dir: docs/pr-preview/${{ steps.generate_slug.outputs.slug }}
+          action: auto
       - name: Publish env
         uses: marocchino/sticky-pull-request-comment@v2
         with:
