@@ -6,7 +6,6 @@ on:
       - opened
       - reopened
       - synchronize
-      - closed
 
 concurrency: preview-${{ github.ref }}
 
@@ -21,11 +20,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.15
+      - name: Generate slug
+        id: generate_slug
+        run: echo "##[set-output name=slug;]$(echo ${GITHUB_HEAD_REF#refs/heads/} | sed -r 's/[~\^]+//g' | sed -r 's/[^a-zA-Z0-9]+/-/g' | sed -r 's/^-+\|-+$//g' | tr A-Z a-z)"
       - name: Install Deps and Build SB Preview
         run: npm install && npm run build-storybook
-      - uses: rossjrw/pr-preview-action@v1
+      - uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
-          source-dir: ./storybook-static/
-          preview-branch: gh-pages
-          umbrella-dir: pr-preview
-          action: auto
+          branch: gh-pages
+          folder: storybook-static
+          target-folder: docs/pr-preview/${{ steps.generate_slug.outputs.slug }}
+      - name: Publish env
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: Preview environment
+          message: |
+            ## Preview environment
+            https://acolpitts-telus.github.io/storybook-preview/pr-preview/${{ steps.generate_slug.outputs.slug }}/
